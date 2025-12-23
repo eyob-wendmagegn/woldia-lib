@@ -1,13 +1,24 @@
+// app/student/news/page.tsx
 'use client';
 
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import NewsList from '@/components/NewsList';
-import { useTranslation } from '@/lib/i18n'; // ← ADDED
+import { useTranslation } from '@/lib/i18n';
 
 export default function StudentNewsPage() {
-  const { t } = useTranslation(); // ← ADDED
+  const { t } = useTranslation();
   const role = 'student';
-  const userId = localStorage.getItem('userId') || 'unknown';
+
+  // Safely get userId only in the browser
+  const [userId, setUserId] = useState<string>('unknown');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const id = localStorage.getItem('userId');
+      setUserId(id || 'unknown');
+    }
+  }, []);
 
   return (
     <Layout role={role}>
